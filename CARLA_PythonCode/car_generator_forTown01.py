@@ -628,6 +628,9 @@ def main():
 
     args = argparser.parse_args()
 
+    if args.vehicleID == 10000:
+        args.vehicleID = 10
+
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
     actor_list = []
