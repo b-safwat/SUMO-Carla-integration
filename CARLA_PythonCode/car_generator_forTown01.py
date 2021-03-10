@@ -15,7 +15,7 @@ import math
 import shutil
 
 try:
-    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
+    sys.path.append(glob.glob('../../carla/dist/carla-*%d.%d-%s.egg' % (
         sys.version_info.major,
         sys.version_info.minor,
         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
@@ -249,7 +249,7 @@ def Generate_New_Vehicles(SumoVehicleInfo_ForAll, Elapsedtime, actor_list, bluep
             transform = actor.get_transform()
             actor_list.append(camera)
 
-            # Rear Right camera
+            ## Rear Right camera
             # camera_bp = blueprint_library.find('sensor.camera.rgb')
             # camera_transform = carla.Transform(carla.Location(x=-x_diff_rear,y = y_diff, z=c_height), carla.Rotation(yaw = 120))
             # camera = world.spawn_actor(camera_bp, camera_transform, attach_to=actor)
@@ -257,17 +257,17 @@ def Generate_New_Vehicles(SumoVehicleInfo_ForAll, Elapsedtime, actor_list, bluep
             # transform = camera.get_transform()
             # transform = actor.get_transform()
             # actor_list.append(camera)
-
+            #
             # Rear camera
-            camera_bp = blueprint_library.find('sensor.camera.rgb')
-            camera_transform = carla.Transform(carla.Location(x=-x_diff_rear - 0.2, z=c_height),
-                                               carla.Rotation(yaw=180))
-            camera = world.spawn_actor(camera_bp, camera_transform, attach_to=actor)
-            camera.listen(lambda image: image.save_to_disk(
-                OUTPUT_PATH + str(new_id_list[n]) + '/rear180/rgb_%s.png' % (image.timestamp)))
-            transform = camera.get_transform()
-            transform = actor.get_transform()
-            actor_list.append(camera)
+            # camera_bp = blueprint_library.find('sensor.camera.rgb')
+            # camera_transform = carla.Transform(carla.Location(x=-x_diff_rear - 0.2, z=c_height),
+            #                                    carla.Rotation(yaw=180))
+            # camera = world.spawn_actor(camera_bp, camera_transform, attach_to=actor)
+            # camera.listen(lambda image: image.save_to_disk(
+            #     OUTPUT_PATH + str(new_id_list[n]) + '/rear180/rgb_%s.png' % (image.timestamp)))
+            # transform = camera.get_transform()
+            # transform = actor.get_transform()
+            # actor_list.append(camera)
 
             # Rear Left camera
             # camera_bp = blueprint_library.find('sensor.camera.rgb')
@@ -319,15 +319,15 @@ def Generate_New_Vehicles(SumoVehicleInfo_ForAll, Elapsedtime, actor_list, bluep
             # actor_list.append(camera)
 
             # Depth: Rear camera
-            camera_bp = blueprint_library.find('sensor.camera.depth')
-            camera_transform = carla.Transform(carla.Location(x=-x_diff_rear - 0.2, z=c_height),
-                                               carla.Rotation(yaw=180))
-            camera = world.spawn_actor(camera_bp, camera_transform, attach_to=actor)
-            camera.listen(lambda image: image.save_to_disk(
-                OUTPUT_PATH + str(new_id_list[n]) + '/rear180D/depth_%s.png' % (image.timestamp)))
-            transform = camera.get_transform()
-            transform = actor.get_transform()
-            actor_list.append(camera)
+            # camera_bp = blueprint_library.find('sensor.camera.depth')
+            # camera_transform = carla.Transform(carla.Location(x=-x_diff_rear - 0.2, z=c_height),
+            #                                    carla.Rotation(yaw=180))
+            # camera = world.spawn_actor(camera_bp, camera_transform, attach_to=actor)
+            # camera.listen(lambda image: image.save_to_disk(
+            #     OUTPUT_PATH + str(new_id_list[n]) + '/rear180D/depth_%s.png' % (image.timestamp)))
+            # transform = camera.get_transform()
+            # transform = actor.get_transform()
+            # actor_list.append(camera)
 
             # Depth: Rear Left camera
             # camera_bp = blueprint_library.find('sensor.camera.depth')
@@ -805,14 +805,53 @@ def main(selected_vehicle_camera):
 
 
 if __name__ == '__main__':
-    numbers = int(OUTPUT_PATH.split("/")[0].split("Car")[1])
-    assert MaxVehicleID(FILE_NAME) == numbers
+    scenari = [ "Town02_Car50.log",
+                "Town02_Car50_2.log",
+                "Town02_Car50_3.log",
+                "Town02_Car50_4.log",
+                "Town01_Car100_2.log",
+                "Town01_Car100_3.log",
+                "Town01_Car100_4.log",
+                "Town01_Car100.log",
+                "Town01_Car150_2.log",
+                "Town01_Car150_3.log",
+                "Town01_Car150_4.log",
+                "Town01_Car150.log",
+                "Town01_Car200_2.log",
+                "Town01_Car200_3.log",
+                "Town01_Car200_4.log",
+                "Town01_Car200.log",
+                "Town01_Car50_2.log",
+                "Town01_Car50_3.log",
+                "Town01_Car50_4.log",
+                "Town01_Car50.log",
+                "Town02_Car100_2.log",
+                "Town02_Car100_3.log",
+                "Town02_Car100_4.log",
+                "Town02_Car100.log",
+                "Town02_Car150_1.log",
+                "Town02_Car150_2.log",
+                "Town02_Car150_3.log",
+                "Town02_Car150_4.log",
+                "Town02_Car150.log",
+                "Town02_Car200_2.log",
+                "Town02_Car200.log"
+                ]
 
-    # for selected_vehicle_camera in range(numbers):
-    selected_vehicle_camera = 10
-    try:
-        main(selected_vehicle_camera)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        print('\ndone.')
+    for scenario in scenari:
+        numbers = int(scenario.split("Car")[1].split(".")[0])
+        #
+        FILE_NAME = r'../SUMO_TrafficLog/'+scenario
+        OUTPUT_PATH = 'Car'+numbers+'/data/'
+        BSM_ORIGINALPATH = 'workplace/Car'+numbers+'/'
+
+        numbers = int(numbers.split("_")[0])
+
+        for selected_vehicle_camera in range(numbers):
+        # selected_vehicle_camera = 10
+            try:
+                main(selected_vehicle_camera)
+            except KeyboardInterrupt:
+                pass
+            finally:
+                print('\ndone.')
