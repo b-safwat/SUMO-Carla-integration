@@ -808,10 +808,11 @@ if __name__ == '__main__':
     numbers = int(OUTPUT_PATH.split("/")[0].split("Car")[1])
     assert MaxVehicleID(FILE_NAME) == numbers
 
-    for selected_vehicle_camera in range(numbers):
-        try:
-            main(selected_vehicle_camera)
-        except KeyboardInterrupt:
-            pass
-        finally:
-            print('\ndone.')
+    # for selected_vehicle_camera in range(numbers):
+    selected_vehicle_camera = 10
+    try:
+        main(selected_vehicle_camera)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        print('\ndone.')
