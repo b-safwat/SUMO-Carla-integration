@@ -12,9 +12,10 @@ import glob
 import os
 import sys
 import math
+import shutil
 
 try:
-    sys.path.append(glob.glob('../../carla_0.9.5/PythonAPI/carla/dist/carla-*%d.%d-%s.egg' % (
+    sys.path.append(glob.glob('../carla/dist/carla-*%d.%d-%s.egg' % (
         sys.version_info.major,
         sys.version_info.minor,
         'win-amd64' if os.name == 'nt' else 'linux-x86_64'))[0])
@@ -134,6 +135,7 @@ def Generate_New_Vehicles(SumoVehicleInfo_ForAll, Elapsedtime, actor_list, bluep
             new_transform_list.append(transform)
             new_id_list.append(SumoVehicleInfo_ForAll[i]['id'])
             active_carID_list.append(SumoVehicleInfo_ForAll[i]['id'])
+
     #    print('new_transform_list is: ',len(new_transform_list))
     for n, transform in enumerate(new_transform_list):
         #     if n >= args.number_of_vehicles:
@@ -579,12 +581,13 @@ def Kill_Finished_Vehicles(SumoVehicleInfo_ForAll, Elapsedtime, actor_list, kill
     return actor_list, killed_list, active_carID_list
 
 
-def main():
+def main(selected_vehicle_camera):
     # VehicleNumber = MaxVehicleID('sumo_log/Town01_Car50.log')
     VehicleNumber = MaxVehicleID(FILE_NAME)
 
     #    VehicleNumber = 50
     active_carID_list = []
+
     argparser = argparse.ArgumentParser(
         description=__doc__)
     argparser.add_argument(
@@ -627,9 +630,13 @@ def main():
         help='for sensor')
 
     args = argparser.parse_args()
+    args.vehicleID = selected_vehicle_camera
 
-    if args.vehicleID == 10000:
-        args.vehicleID = 10
+    vehicle_dir = os.path.join(OUTPUT_PATH, str(args.vehicleID))
+
+    if os.path.isdir(vehicle_dir):
+        shutil.rmtree(vehicle_dir)
+        shutil.rmtree(BSM_ORIGINALPATH)
 
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
@@ -798,10 +805,13 @@ def main():
 
 
 if __name__ == '__main__':
+    numbers = int(OUTPUT_PATH.split("/")[0].split("Car")[1])
+    assert MaxVehicleID(FILE_NAME) == numbers
 
-    try:
-        main()
-    except KeyboardInterrupt:
-        pass
-    finally:
-        print('\ndone.')
+    for selected_vehicle_camera in range(numbers):
+        try:
+            main(selected_vehicle_camera)
+        except KeyboardInterrupt:
+            pass
+        finally:
+            print('\ndone.')
