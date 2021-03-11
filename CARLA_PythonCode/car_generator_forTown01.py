@@ -198,15 +198,15 @@ def Generate_New_Vehicles(SumoVehicleInfo_ForAll, Elapsedtime, actor_list, bluep
                 os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/front')
                 os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/front_Right60')
                 os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/front_Left300')
-                os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear_Right120')
-                os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear180')
-                os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear_Left240')
+                # os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear_Right120')
+                # os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear180')
+                # os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear_Left240')
                 os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/frontD')
                 os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/front_Right60D')
                 os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/front_Left300D')
-                os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear_Right120D')
-                os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear180D')
-                os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear_Left240D')
+                # os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear_Right120D')
+                # os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear180D')
+                # os.makedirs(OUTPUT_PATH + str(new_id_list[n]) + '/rear_Left240D')
             except:
                 print('Cannot make new folder for data for ID %d', new_id_list[n])
 
@@ -758,6 +758,7 @@ def main(selected_vehicle_camera):
                     if elapsedtime > 10:
                         client.stop_recorder()
                         bsm_f.close()
+                        return
                         quit()
 
                 if elapsedtime > 500:
@@ -766,6 +767,7 @@ def main(selected_vehicle_camera):
                     ErrorPath = open(writing_path, "w")
                     ErrorPath.write('Error: I cannot finish this simulation...\n')
                     ErrorPath.close()
+                    return
                     quit()
 
             Active_Car_Num = ChangeLocation4ExistingCars(SumoVehicleInfo_ForAll, previous_elapsedtime,
@@ -805,10 +807,11 @@ def main(selected_vehicle_camera):
 
 
 if __name__ == '__main__':
-    scenari = [ "Town02_Car50.log",
-                "Town02_Car50_2.log",
-                "Town02_Car50_3.log",
-                "Town02_Car50_4.log",
+    scenarios = [
+                "Town01_Car50.log",
+                "Town01_Car50_2.log",
+                "Town01_Car50_3.log",
+                "Town01_Car50_4.log",
                 "Town01_Car100_2.log",
                 "Town01_Car100_3.log",
                 "Town01_Car100_4.log",
@@ -821,10 +824,11 @@ if __name__ == '__main__':
                 "Town01_Car200_3.log",
                 "Town01_Car200_4.log",
                 "Town01_Car200.log",
-                "Town01_Car50_2.log",
-                "Town01_Car50_3.log",
-                "Town01_Car50_4.log",
-                "Town01_Car50.log",
+
+                "Town02_Car50.log",
+                "Town02_Car50_2.log",
+                "Town02_Car50_3.log",
+                "Town02_Car50_4.log",
                 "Town02_Car100_2.log",
                 "Town02_Car100_3.log",
                 "Town02_Car100_4.log",
@@ -836,10 +840,10 @@ if __name__ == '__main__':
                 "Town02_Car150.log",
                 "Town02_Car200_2.log",
                 "Town02_Car200.log"
-                ]
+                 ]
 
-    for scenario in scenari:
-        numbers = int(scenario.split("Car")[1].split(".")[0])
+    for scenario in scenarios:
+        numbers = scenario.split("Car")[1].split(".")[0]
         #
         FILE_NAME = r'../SUMO_TrafficLog/'+scenario
         OUTPUT_PATH = 'Car'+numbers+'/data/'
@@ -855,3 +859,7 @@ if __name__ == '__main__':
                 pass
             finally:
                 print('\ndone.')
+
+            print("Scenario " + str(scenario) + " vehicle " + selected_vehicle_camera + " done")
+
+        print("Scenario " + scenario + " done")
