@@ -53,5 +53,19 @@ You basically use ./mapconverter to convert the road networks. (see SUMO_script 
   ./script_forgettingdata
 
 
+# To Run: 
+1- Create environemnt 
+conda create -n carla python=3.5
 
-# Under review: Cooperative Perception with Deep Reinforcement Learningfor Connected Vehicles (S. Aoki, T. Higuchi, O. Altintas)
+2- adjust the run_all_exp.sh file to have correct paths
+
+3- adjust the paths in car_generator_forTown01.py for both workspace and imgs
+
+4- cd to Carla_PythonCode
+
+5- Adjust path in detect_objects.py
+
+6- run the script: 
+source ../run_all_exp.sh
+
+
